@@ -1,17 +1,16 @@
 {
-  "name": "163-music",
+  "name": "vue-resume-2018",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "install": "^0.11.0",
-    "leancloud-storage": "^3.6.7",
-    "plupload": "^2.3.6",
-    "qiniu-js": "^1.0.22"
+    "leancloud-storage": "^3.6.0",
+    "vue": "^2.5.13"
   }
 }
