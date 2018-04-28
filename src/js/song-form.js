@@ -1,7 +1,7 @@
 {
-    let view={
-        el:'.page>main',
-        template:`
+    let view = {
+        el: '.page>main',
+        template: `
         <h1>新建歌曲</h1>
         <form>
             <div class="row">
@@ -30,19 +30,19 @@
 
         </form>
         `,
-        render(data={}){
-            let html=this.template
-            let placeholders=['name','url','singer','id']   
-            placeholders.map( (string)=>{
-                html=html.replace(`__${string}__`,data[string] || '')
+        render(data = {}) {
+            let html = this.template
+            let placeholders = ['name', 'url', 'singer', 'id']
+            placeholders.map((string) => {
+                html = html.replace(`__${string}__`, data[string] || '')
             })
             $(this.el).html(html)
         },
-        reset(){
+        reset() {
             this.render({})
         }
     }
-  
+
 
     let model = {
         data: { name: '', singer: '', url: '', id: '' },
@@ -71,10 +71,9 @@
                 return response
             })
         }
+    }
 
 
-
-}
     let controller = {
         init(view, model) {
             this.view = view
@@ -90,26 +89,26 @@
             //发布，4更新：2的addClass保持；4增加：1addClass 2removeClass 
             //////////////////////////////////////////////////////////
 
-             //订阅，1,被点，4内容为空
-             window.eventHub.on('new-select', () => {
+            //订阅，1,被点，4内容为空
+            window.eventHub.on('new-select', () => {
                 this.view.reset()
             })
 
 
-              //订阅，2被点，4换内容
+            //订阅，2被点，4换内容
             window.eventHub.on('list-select', (data) => {
                 this.model.data = data
                 this.view.render(this.model.data)
             })
 
-              //订阅，3被点，且上传完成，4换内容
-              window.eventHub.on('upload', (data) => {
+            //订阅，3被点，且上传完成，4换内容
+            window.eventHub.on('upload', (data) => {
                 this.model.data = data
                 this.view.render(this.model.data)
             })
 
 
-            //发布，4被点，更新：2的addClass保持；4增加：1addClass 2removeClass 
+            //发布，4被点，更新：2的addClass保持，数据内容改变；4增加：1addClass 2removeClass 数据内容改变
             $(this.view.el).on('submit', 'form', (e) => {
                 e.preventDefault()
                 if (this.model.data.id) {
@@ -126,6 +125,7 @@
             needs.map((string) => {
                 data[string] = $(this.view.el).find(`[name="${string}"]`).val()
             })
+              //发布，4被点，通知2的数据内容更新
             this.model.update(data).then(() => {
                 window.eventHub.emit('update', JSON.parse(JSON.stringify(this.model.data)))
             })
@@ -138,15 +138,16 @@
             })
             this.model.create(data).then(() => {
                 this.view.reset()
-                //this.model.data === 'ADDR 108'
                 let string = JSON.stringify(this.model.data)
                 let object = JSON.parse(string)
+                 //发布，4被点，通知2的数据内容增加
                 window.eventHub.emit('create', object)
+                 //发布，4被点，2removeClass，1addClass 
                 window.eventHub.emit('list-no-select', '')
                 window.eventHub.emit('new-select', '')
             })
         }
     }
-controller.init(view,model)
+    controller.init(view, model)
 
 }

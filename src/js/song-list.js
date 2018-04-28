@@ -8,14 +8,14 @@
         render(data) {
             let $el = $(this.el)
             $el.html(this.template)
-            let { songs} = data
+            let { songs } = data
             let liList = songs.map((song) => {
                 let $li = $('<li></li>').text(song.name).attr('data-song-id', song.id)
-                if(data.selectSongId===song.id) {$li.addClass('active')  }   
+                if (data.selectSongId === song.id) { $li.addClass('active') }
                 return $li
             })
             $el.find('ul').empty()
-            liList.map((domLi) => {$el.find('ul').append(domLi)})
+            liList.map((domLi) => { $el.find('ul').append(domLi) })
         },
         clearActive() {
             $(this.el).find('.active').removeClass('active')
@@ -23,12 +23,12 @@
     }
 
     let model = {
-        data: { songs: [] , selectSongId:undefined},
+        data: { songs: [], selectSongId: undefined },
         find() {
             var query = new AV.Query('Song');
             return query.find().then((songs) => {
                 this.data.songs = songs.map((song) => {
-                    return { id: song.id, ...song.attributes } 
+                    return { id: song.id, ...song.attributes }
                 })
                 console.log(songs)
                 return songs
@@ -69,7 +69,7 @@
                 //4换内容
                 let data
                 let songId = e.currentTarget.getAttribute('data-song-id')
-                this.model.data.selectSongId=songId
+                this.model.data.selectSongId = songId //让2的class保持active
                 let songs = this.model.data.songs
                 for (let i = 0; i < songs.length; i++) { if (songs[i].id === songId) { data = songs[i]; break } }
                 window.eventHub.emit('list-select', JSON.parse(JSON.stringify(data)))
@@ -80,7 +80,6 @@
             window.eventHub.on('update', (song) => {
                 let songs = this.model.data.songs
                 for (let i = 0; i < songs.length; i++) { if (songs[i].id === song.id) { Object.assign(songs[i], song) } }
-                console.log(this.model.data)
                 this.view.render(this.model.data)
             })
 
@@ -89,7 +88,6 @@
                 Data = JSON.parse(JSON.stringify(data))
                 this.model.data.songs.push(Data)
                 this.view.render(this.model.data)
-                console.log(this.model.data)
             })
         }
 
