@@ -29,8 +29,11 @@
             var query = new AV.Query('Song');
             return query.find().then((songs) => {
                 this.data.songs = songs.map((song) => {
+                    
                     return { id: song.id, ...song.attributes }
+                   
                 })
+                console.log(songs)
                 return songs
             })
         }
@@ -49,7 +52,13 @@
                 this.view.render(this.model.data)
                 console.log(this.model.data)
             })
+            this.getAllSongs()
+        },
+        getAllSongs(){
+            return this.model.find().then(()=>{
+              this.view.render(this.model.data)
+            })
         }
-    }
+        }
     controller.init(view, model)
 }
