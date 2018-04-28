@@ -22,6 +22,8 @@ window.eventHub={
         this.events[eventName].push(fn)
         
     },
-    off(){}
+    off(eventName,fn){
+        
+    }
 
 }

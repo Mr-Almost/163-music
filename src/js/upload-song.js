@@ -56,10 +56,10 @@
                             var response = JSON.parse(info.response);
                             var sourceLink = '//'+domain+'/' + encodeURIComponent(response.key); //获取上传成功后的文件的Url
                         
-                            window.eventHub.emit('upload',{
-                             url:sourceLink,
-                             name:response.key   
-                            })
+                            //3被点，1会addClass，2会removeClass，4会换内容
+                            window.eventHub.emit('new-select', '')  //1会addClass
+                            window.eventHub.emit('list-no-select', '') //2会removeClass
+                            window.eventHub.emit('upload',{ url:sourceLink, name:response.key})//4会换内容
                         },
                     'Error': function(up, err, errTip) {
                            //上传出错时,处理相关的事情
